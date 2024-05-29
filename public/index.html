@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Champ Techs: Seamless File Sharing</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        background-image: url("path/to/your/background-image.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2,
+      h3 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      h1 {
+        color: #2c3e50;
+        font-size: 2.5em;
+        font-weight: 700;
+      }
+      h2 {
+        color: #34495e;
+        font-size: 1.8em;
+        font-weight: 500;
+      }
+      h3 {
+        color: #16a085;
+        font-size: 1.5em;
+        font-weight: 400;
+      }
+      p {
+        color: #666;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      form {
+        text-align: center;
+        margin-top: 30px;
+      }
+      input[type="file"] {
+        display: block;
+        margin: 10px auto;
+      }
+      input[type="submit"] {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      input[type="submit"]:hover {
+        background-color: #2980b9;
+      }
+      #loading {
+        display: none;
+        color: #e67e22;
+        text-align: center;
+      }
+      #upload-status {
+        margin-top: 20px;
+        text-align: center;
+        color: #27ae60;
+      }
+      .link-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .copy-btn {
+        background-color: #2ecc71;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .copy-btn:hover {
+        background-color: #27ae60;
+      }
+      .expiry-message {
+        color: #e74c3c;
+        margin-bottom: 10px;
+      }
+      @media screen and (max-width: 768px) {
+        .container {
+          padding: 10px;
+          border-radius: 0;
+        }
+        h1 {
+          font-size: 24px;
+        }
+        h2 {
+          font-size: 20px;
+        }
+        h3 {
+          font-size: 18px;
+        }
+        input[type="submit"] {
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to Champ Techs</h1>
+      <h2>Effortless File Sharing, Secure and Quick</h2>
+      <div id="upload">
+        <h3>Upload Your Files</h3>
+        <form id="upload-form">
+          <input type="file" name="file" required />
+          <input type="submit" value="Upload" />
+        </form>
+        <p id="loading">Uploading...</p>
+        <p id="upload-status"></p>
+        <div class="link-container" id="link-container" style="display: none">
+          <p class="expiry-message">Download link (valid for 24 hours):</p>
+          <p id="generated-link"></p>
+          <button class="copy-btn" id="copy-btn">Copy Link</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const form = document.getElementById("upload-form");
+      const loading = document.getElementById("loading");
+      const uploadStatus = document.getElementById("upload-status");
+      const linkContainer = document.getElementById("link-container");
+      const generatedLink = document.getElementById("generated-link");
+      const copyBtn = document.getElementById("copy-btn");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        loading.style.display = "block";
+        uploadStatus.textContent = "";
+
+        const formData = new FormData(form);
+        fetch("/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            loading.style.display = "none";
+            uploadStatus.textContent = "Upload successful!";
+            generatedLink.textContent = data;
+            linkContainer.style.display = "block";
+          })
+          .catch((error) => {
+            loading.style.display = "none";
+            uploadStatus.textContent = "Error: " + error;
+          });
+      });
+
+      copyBtn.addEventListener("click", function () {
+        const linkText = generatedLink.textContent;
+        navigator.clipboard
+          .writeText(linkText)
+          .then(() => {
+            alert("Link copied to clipboard!");
+          })
+          .catch((err) => {
+            console.error("Failed to copy: ", err);
+          });
+      });
+    </script>
+  </body>
+</html>
