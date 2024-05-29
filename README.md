@@ -25,8 +25,7 @@ Welcome to Cloud File Uploader! This project allows users to upload files to AWS
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/cloud-file-uploader.git
-cd cloud-file-uploader
+git clone https://github.com/skfawad911/Cloud-File-Uploader-Secure-File-Sharing-with-AWS-S3.git
 ```
 
 ### Step 2: Install Dependencies
